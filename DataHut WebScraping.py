@@ -146,6 +146,15 @@ driver.get(site_url)
 content = driver.page_source
 homepage_soup = BeautifulSoup(content, 'html5lib')
 
+
+# Continuously clicking the button to show more products till everything is loaded
+pagination()
+
+
+# Scrolling down the page in order to overcome Lazy Loading
+lazy_loading()
+
+
 # Fetching the product links of all items
 product_links = []
 all_products = homepage_soup.find_all('div', attrs={"class": "css-1322gsb"})[0]
