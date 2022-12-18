@@ -48,8 +48,9 @@ def pagination():
     lazy_loading()
 
 
-def fetch_product_links(ap):
-    for one_product in ap.find_all('div', {'class': 'css-foh208'}):
+# Function to fetch the product links of products which are not lazy loaded
+def fetch_product_links(allproducts):
+    for one_product in allproducts.find_all('div', {'class': 'css-foh208'}):
         for one_product_link in one_product.find_all('a'):
             if one_product_link['href'].startswith('https:'):
                 product_links.append(one_product_link['href'])
@@ -57,8 +58,9 @@ def fetch_product_links(ap):
                 product_links.append('https://www.sephora.com' + one_product_link['href'])
 
 
-def fetch_lazy_loading_product_links(ap):
-    for one_product in ap.find_all('div', {'class': 'css-1qe8tjm'}):
+# Function to fetch the product links of products which are lazy loaded
+def fetch_lazy_loading_product_links(allproducts):
+    for one_product in allproducts.find_all('div', {'class': 'css-1qe8tjm'}):
         for one_product_link in one_product.find_all('a'):
             if one_product_link['href'].startswith('https:'):
                 product_links.append(one_product_link['href'])
@@ -66,12 +68,14 @@ def fetch_lazy_loading_product_links(ap):
                 product_links.append('https://www.sephora.com' + one_product_link['href'])
 
 
+# Function to extract content of the page
 def extract_content(url):
     page_content = requests.get(url, headers=header)
     product_soup = BeautifulSoup(page_content.content, 'html.parser')
     return product_soup
 
 
+# Function to extract brand name
 def brand_data(soup):
     try:
         brand = soup.find('a', attrs={"data-at": "brand_name"}).text
@@ -80,6 +84,7 @@ def brand_data(soup):
         pass
 
 
+# Function to extract product name
 def product_name(soup):
     try:
         product = soup.find('span', attrs={"data-at": "product_name"}).text
@@ -88,6 +93,7 @@ def product_name(soup):
         pass
 
 
+# Function to extract number of reviews
 def reviews_data(soup):
     try:
         reviews = soup.find('span', attrs={"data-at": "number_of_reviews"}).text
@@ -96,6 +102,7 @@ def reviews_data(soup):
         pass
 
 
+# Function to extract number of loves
 def love_data(soup):
     try:
         love = soup.find('span', attrs={"class": "css-jk94q9"}).text
@@ -104,6 +111,7 @@ def love_data(soup):
         pass
 
 
+# Function to extract star rating
 def star_data(soup):
     try:
         star = soup.find('span', attrs={"class": "css-1tbjoxk"})['aria-label']
@@ -112,6 +120,7 @@ def star_data(soup):
         pass
 
 
+# Function to extract price
 def price_data(soup):
     try:
         price = soup.find('b', attrs={"class": "css-0"}).text
@@ -120,10 +129,11 @@ def price_data(soup):
         pass
 
 
+# Function to extract ingredients
 def ingredients_data(prod_url):
     driver.get(prod_url)
-    content = driver.page_source
-    product_soup = BeautifulSoup(content, 'html5lib')
+    ingredients_content = driver.page_source
+    product_soup = BeautifulSoup(ingredients_content, 'html5lib')
 
     try:
         for ingredient in product_soup.find('div', attrs={"class": "css-1ue8dmw eanm77i0"}):
@@ -138,6 +148,7 @@ def ingredients_data(prod_url):
         pass
 
 
+# Function to extract fragrance family
 def fragrance_data(keyvalue):
     try:
         if keyvalue[0] == 'Fragrance Family':
@@ -146,6 +157,7 @@ def fragrance_data(keyvalue):
         pass
 
 
+# Function to extract scent type
 def scent_data(keyvalue):
     try:
         if keyvalue[0] == 'Scent Type':
@@ -154,6 +166,7 @@ def scent_data(keyvalue):
         pass
 
 
+# Function to extract key notes
 def keynotes(keyvalue):
     try:
         if keyvalue[0] == 'Key Notes':
@@ -162,6 +175,7 @@ def keynotes(keyvalue):
         pass
 
 
+# Function to extract fragrance description
 def fragrance(keyvalue):
     try:
         if keyvalue[0] == 'Fragrance Description':
@@ -170,6 +184,7 @@ def fragrance(keyvalue):
         pass
 
 
+# Function to extract composition
 def composition_data(keyvalue):
     try:
         if keyvalue[0].lower() == 'composition':
