@@ -270,7 +270,7 @@ data = pd.DataFrame(data_dic)
 data['product_url'] = product_links
 
 # Scraping data of all required features
-for product in range(1, len(data)):
+for product in range(len(data)):
     product_url = data['product_url'].iloc[product]
     product_content = extract_content(product_url)
 
