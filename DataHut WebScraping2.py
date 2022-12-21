@@ -1,6 +1,6 @@
 # Importing libraries
-import random
 import time
+import random
 import pandas as pd
 from bs4 import BeautifulSoup
 from selenium import webdriver
